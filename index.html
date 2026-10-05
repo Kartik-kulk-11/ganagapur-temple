@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shri Kshetra Ganagapur · Shri Guru Dattatreya</title>
+  <meta name="description" content="Shri Kshetra Ganagapur — abode of Shri Nrusimha Saraswati. Darshan & seva booking, live timings, crowd status, temple map, Ashta Teerthas, festivals, accommodation and Guru Charitra." />
+  <meta name="theme-color" content="#5a1414" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪔</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Mukta:wght@300;400;500;600;700&family=Noto+Sans+Kannada:wght@400;600&family=Noto+Sans+Telugu:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+<div class="demo-bar">Preview build · bookings & payments are simulated and stored only in this browser</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="top">
+  <div class="wrap nav">
+    <a href="#top" class="brand">
+      <span class="brand-mark">ॐ</span>
+      <span class="brand-text"><b>Shri Kshetra Ganagapur</b><small>Shri Guru Dattatreya Devasthana</small></span>
+    </a>
+    <nav class="menu" id="menu">
+      <a href="#timings" data-i18n="nav_timings">Timings</a>
+      <a href="#sevas" data-i18n="nav_seva">Seva</a>
+      <a href="#explore" data-i18n="nav_explore">Explore</a>
+      <a href="#stay" data-i18n="nav_stay">Stay</a>
+      <a href="#reach" data-i18n="nav_visit">Visit</a>
+      <a href="#gallery" data-i18n="nav_gallery">Gallery</a>
+    </nav>
+    <div class="nav-tools">
+      <select id="lang" aria-label="Language">
+        <option value="en">English</option>
+        <option value="kn">ಕನ್ನಡ</option>
+        <option value="mr">मराठी</option>
+        <option value="hi">हिंदी</option>
+        <option value="te">తెలుగు</option>
+      </select>
+      <button class="btn-ghost sm" data-open="account">👤 <span class="hide-sm">My Bookings</span></button>
+      <button class="burger" id="burger" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg" style="background-image:url('assets/img/gopuram-hero.jpg')"></div>
+  <div class="hero-shade"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="kicker" data-i18n="hero_kicker">Shri Kshetra Ganagapur</p>
+      <h1 data-i18n="hero_title">Shri Guru Dattatreya</h1>
+      <p class="hero-sub" data-i18n="hero_sub">Abode of Shri Nrusimha Saraswati — where the Nirguna Padukas bless every devotee who comes with faith.</p>
+      <div class="hero-cta">
+        <button class="btn-gold" data-open="darshan" data-i18n="btn_darshan">Book Darshan</button>
+        <button class="btn-light" data-open="seva" data-i18n="btn_seva">Book Seva</button>
+        <a class="btn-link" href="#planner" data-i18n="btn_plan">Plan your Yatra</a>
+      </div>
+      <p class="jai">🙏 Jai Guru Datta</p>
+    </div>
+
+    <aside class="status-card" aria-live="polite">
+      <div class="sc-head">
+        <span class="pill" id="openPill">●</span>
+        <span id="clock" class="clock">--:--</span>
+      </div>
+      <div class="sc-now">
+        <small>Now</small>
+        <b id="nowRitual">—</b>
+        <span id="nowRange"></span>
+      </div>
+      <div class="sc-next">
+        <small>Next</small>
+        <b id="nextRitual">—</b>
+        <span id="nextIn"></span>
+      </div>
+      <div class="sc-crowd">
+        <div><small>Crowd (est.)</small><b id="crowdLabel">—</b></div>
+        <div><small>Waiting</small><b id="crowdWait">—</b></div>
+      </div>
+      <div class="crowd-bar"><i id="crowdFill"></i></div>
+      <a href="#timings" class="sc-link">Full timings & digital token →</a>
+    </aside>
+  </div>
+  <div class="hero-scroll">⌄</div>
+</section>
+
+<!-- ============ QUICK ACTIONS ============ -->
+<section class="quick wrap">
+  <button data-open="darshan"><span>🛕</span>Darshan</button>
+  <button data-open="seva"><span>🙏</span>Seva Booking</button>
+  <a href="#stay"><span>🏨</span>Accommodation</a>
+  <a href="#reach"><span>📍</span>How to Reach</a>
+  <a href="#gurucharitra"><span>📿</span>Guru Charitra</a>
+  <a href="#annadan"><span>🍚</span>Mahaprasad</a>
+  <button data-open="donate"><span>🪙</span>Donate</button>
+  <a href="#live"><span>📺</span>Live Darshan</a>
+</section>
+
+<!-- ============ ABOUT / DEITY ============ -->
+<section class="section about" id="about">
+  <div class="wrap about-grid">
+    <figure class="deity-frame">
+      <img src="assets/img/dattatreya-ravivarma.jpg" alt="Lord Dattatreya — painting by Raja Ravi Varma" loading="lazy" />
+      <figcaption>Shri Dattatreya · Raja Ravi Varma</figcaption>
+    </figure>
+    <div class="about-copy">
+      <p class="eyebrow">The Kshetra</p>
+      <h2>Where the Guru promised to stay forever</h2>
+      <p>Ganagapur, on the banks of the Bhima in Kalaburagi district, is among the holiest kshetras of the Datta sampradaya. Here <b>Shri Nrusimha Saraswati</b> — the second Kali-yuga incarnation of Lord Dattatreya after Shripad Shrivallabh — lived for some twenty-three years, curing the afflicted, guiding seekers and accepting bhiksha from the villagers.</p>
+      <p>Before departing for Shri Shaila, the Guru installed the <b>Nirguna Padukas</b> at the math and assured his devotees that he would remain present in Ganagapur for all time. To this day pilgrims bathe at the Sangam, worship the padukas, read the Guru Charitra and go for <i>madhukari</i> believing the Guru himself may accept their alms.</p>
+      <div class="about-facts">
+        <div><b>1378–1459</b><span>Shri Nrusimha Saraswati</span></div>
+        <div><b>53</b><span>Adhyayas of Guru Charitra</span></div>
+        <div><b>8</b><span>Sacred Teerthas</span></div>
+      </div>
+      <figure class="guru-mini">
+        <img src="assets/img/nrusimha-saraswati.jpg" alt="Shri Nrusimha Saraswati — artist's visualisation" loading="lazy" />
+        <figcaption><b>Shri Nrusimha Saraswati</b><br/>As visualised from the Guru Charitra</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAIN TEMPLE SHOWCASE ============ -->
+<section class="section temple-show">
+  <div class="wrap">
+    <div class="sec-head center">
+      <p class="eyebrow">Shri Dutta Nirguna Math</p>
+      <h2>The Main Temple</h2>
+      <p>From the Mahadwara to the silver-clad Garbhagriha — a walk through the heart of Ganagapur.</p>
+    </div>
+    <div class="bento">
+      <figure class="b1" data-lb="assets/img/gopuram-hero.jpg"><img src="assets/img/gopuram-hero.jpg" alt="" loading="lazy"><figcaption><b>Rajagopuram</b>Painted tower crowned with the Datta flag</figcaption></figure>
+      <figure class="b2" data-lb="assets/img/mahadwara.jpg"><img src="assets/img/mahadwara.jpg" alt="" loading="lazy"><figcaption><b>Shri Dutta Mahadwara</b>The arch that welcomes every pilgrim</figcaption></figure>
+      <figure class="b3" data-lb="assets/img/silver-shrine.jpg"><img src="assets/img/silver-shrine.jpg" alt="" loading="lazy"><figcaption><b>Nirguna Paduka Shrine</b>Silver-clad sanctum doorway</figcaption></figure>
+      <figure class="b4" data-lb="assets/img/sanctum-stone.jpg"><img src="assets/img/sanctum-stone.jpg" alt="" loading="lazy"><figcaption><b>Stone Vimana</b>Black-basalt walls of the Garbhagriha</figcaption></figure>
+      <figure class="b5" data-lb="assets/img/stone-deity.jpg"><img src="assets/img/stone-deity.jpg" alt="" loading="lazy"><figcaption><b>Sacred Niche</b>Ancient stone image on the prakara</figcaption></figure>
+      <figure class="b6" data-lb="assets/img/sabha-mandap.jpg"><img src="assets/img/sabha-mandap.jpg" alt="" loading="lazy"><figcaption><b>Sabha Mandapa</b>Devotees performing parayana & seva</figcaption></figure>
+      <figure class="b7" data-lb="assets/img/audumbar.jpg"><img src="assets/img/audumbar.jpg" alt="" loading="lazy"><figcaption><b>Audumbar</b>The sacred fig where Datta resides</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMINGS ============ -->
+<section class="section timings" id="timings">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Live · Indian Standard Time</p>
+      <h2>Today's Puja & Darshan</h2>
+      <p id="todayLabel">Timings are approximate and change on festivals, Purnima, Amavasya and crowded days.</p>
+    </div>
+    <div class="timings-grid">
+      <ol class="timeline" id="timeline"></ol>
+
+      <div class="side-stack">
+        <div class="card crowd-card">
+          <h3>🔴 Live Crowd Status</h3>
+          <div class="gauge"><div class="gauge-fill" id="gaugeFill"></div><b id="gaugeLabel">—</b></div>
+          <ul class="legend">
+            <li><i class="g"></i>Low · 10–20 min</li>
+            <li><i class="y"></i>Medium · 20–45 min</li>
+            <li><i class="r"></i>Heavy · 1–2 hrs</li>
+          </ul>
+          <p class="best">✨ Best time to visit today: <b id="bestTime">—</b></p>
+          <canvas id="crowdChart" height="90" aria-label="Expected crowd through the day"></canvas>
+          <small class="muted">Estimate based on day of week, time and festival calendar.</small>
+        </div>
+
+        <div class="card token-card" id="token">
+          <h3>📱 Digital Queue Token</h3>
+          <p class="muted">Skip standing in line — get a token and wait at the Sangam, the mandapa or your room.</p>
+          <div id="tokenBox"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEVAS ============ -->
+<section class="section sevas" id="sevas">
+  <div class="wrap">
+    <div class="sec-head split">
+      <div>
+        <p class="eyebrow">Offer your devotion</p>
+        <h2>Sevas & Poojas</h2>
+        <p>Book in person or online — sevas can be performed in your name with sankalpa, and prasadam posted to your home anywhere in the world.</p>
+      </div>
+      <button class="btn-maroon" data-open="seva">Book a Seva →</button>
+    </div>
+    <div class="seva-grid" id="sevaGrid"></div>
+  </div>
+</section>
+
+<!-- ============ LIVE & AUDIO ============ -->
+<section class="section live" id="live">
+  <div class="wrap live-grid">
+    <div class="live-player">
+      <div class="live-screen" style="background-image:url('assets/img/garbhagriha-door.jpg')">
+        <span class="live-badge"><i></i> LIVE</span>
+        <div class="live-over">
+          <b id="liveTitle">Live Darshan</b>
+          <span id="liveSub">Streams during arati times</span>
+          <button class="btn-gold sm" id="liveBtn">▶ Watch Live</button>
+        </div>
+      </div>
+      <p class="muted small">Live streaming will be enabled with the temple administration's permission.</p>
+    </div>
+    <div class="audio-box">
+      <p class="eyebrow">Daily Datta Audio</p>
+      <h2>Today's Spiritual Content</h2>
+      <ul class="audio-list" id="audioList"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPLORE / MAP ============ -->
+<section class="section explore" id="explore">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Interactive Kshetra Map</p>
+      <h2>Explore Ganagapur</h2>
+      <p>Temples, the Sangam, transport and pilgrim facilities. Tap a place for details and directions.</p>
+    </div>
+    <div class="map-filters" id="mapFilters">
+      <button class="chip on" data-cat="all">All</button>
+      <button class="chip" data-cat="temple">🛕 Sacred places</button>
+      <button class="chip" data-cat="transport">🚆 Transport</button>
+      <button class="chip" data-cat="facility">🏨 Facilities</button>
+    </div>
+    <div class="map-wrap">
+      <div id="map"></div>
+      <div class="place-list" id="placeList"></div>
+    </div>
+    <p class="muted small">Map pins are approximate; “Directions” opens Google Maps for exact routing.</p>
+  </div>
+</section>
+
+<!-- ============ SANGAM & TEERTHAS ============ -->
+<section class="section sangam">
+  <div class="sangam-bg" style="background-image:url('assets/img/sangam-2.jpg')"></div>
+  <div class="wrap sangam-grid">
+    <div class="sangam-copy">
+      <p class="eyebrow light">Bhima – Amarja Sangam</p>
+      <h2>The Ashta Teerthas</h2>
+      <p>Shri Guru Charitra describes eight sacred teerthas along the Bhima at Ganagapur. A bath in each is said to equal the great pilgrimages of Bharata.</p>
+      <div class="sangam-thumbs">
+        <img src="assets/img/sangam-ghat.jpg" alt="Sangam ghat" loading="lazy" data-lb="assets/img/sangam-ghat.jpg" />
+        <img src="assets/img/audumbar.jpg" alt="Audumbar tree" loading="lazy" data-lb="assets/img/audumbar.jpg" />
+        <img src="assets/img/sangam-offering.jpg" alt="Offering on the river" loading="lazy" data-lb="assets/img/sangam-offering.jpg" />
+      </div>
+    </div>
+    <ol class="teertha-list" id="teerthaList"></ol>
+  </div>
+</section>
+
+<!-- ============ NEARBY ============ -->
+<section class="section nearby">
+  <div class="wrap">
+    <div class="sec-head center">
+      <p class="eyebrow">Around the Kshetra</p>
+      <h2>Nearby Sacred Places</h2>
+    </div>
+    <div class="nearby-grid" id="nearbyGrid"></div>
+  </div>
+</section>
+
+<!-- ============ FESTIVALS ============ -->
+<section class="section festivals" id="festivals">
+  <div class="wrap">
+    <div class="sec-head split">
+      <div>
+        <p class="eyebrow">Utsava Calendar 2026–27</p>
+        <h2>Upcoming Festivals</h2>
+      </div>
+      <div class="countdown" id="countdown"></div>
+    </div>
+    <div class="fest-grid" id="festGrid"></div>
+    <p class="muted small">Dates follow the lunar calendar and are tentative — please confirm with the temple office.</p>
+  </div>
+</section>
+
+<!-- ============ PLANNER ============ -->
+<section class="section planner" id="planner">
+  <div class="wrap planner-grid">
+    <div>
+      <p class="eyebrow">Family Pilgrimage Planner</p>
+      <h2>Plan my Ganagapur Yatra</h2>
+      <p>Tell us when you arrive and leave — we'll arrange darshan, aratis, the Sangam, Ashta Teerthas and Mahaprasad into a day-by-day plan.</p>
+      <form id="planForm" class="form">
+        <label>Arrival <input type="datetime-local" name="arr" required></label>
+        <label>Departure <input type="datetime-local" name="dep" required></label>
+        <label>Devotees <input type="number" name="n" min="1" max="50" value="4"></label>
+        <label class="chk"><input type="checkbox" name="elders"> Elders / children in group</label>
+        <button class="btn-maroon">Generate Plan</button>
+      </form>
+    </div>
+    <div class="itinerary" id="itinerary">
+      <div class="it-empty">🗓️<p>Your personalised itinerary will appear here.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAY ============ -->
+<section class="section stay" id="stay">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Stay near the Guru</p>
+      <h2>Accommodation</h2>
+      <p>Book early for Thursdays, Purnima and Datta Jayanti — rooms fill weeks in advance.</p>
+    </div>
+    <div class="stay-grid" id="stayGrid"></div>
+  </div>
+</section>
+
+<!-- ============ ANNADAN + DONATE ============ -->
+<section class="section annadan" id="annadan">
+  <div class="wrap ann-grid">
+    <div class="ann-card">
+      <img src="assets/img/sabha-mandap.jpg" alt="" loading="lazy" />
+      <div>
+        <p class="eyebrow">Today's Mahaprasad</p>
+        <h3>Annadana</h3>
+        <ul class="facts">
+          <li>🍚 <b>12:00 PM – 2:00 PM</b> after Maha Naivedya</li>
+          <li>📍 Annadana Hall, beside the main math</li>
+          <li>👨‍👩‍👧 Serves thousands of devotees daily — free</li>
+        </ul>
+        <p class="muted">Sponsor a day of Annadana in your family's name.</p>
+        <div class="amounts" data-fund="Annadana">
+          <button>₹501</button><button>₹1,001</button><button>₹5,001</button><button>₹11,001</button><button data-custom>Custom</button>
+        </div>
+      </div>
+    </div>
+    <div class="donate-card">
+      <p class="eyebrow light">Support the Kshetra</p>
+      <h3>Donations</h3>
+      <div class="fund-grid">
+        <button data-fund="General Donation">🪔<span>General</span></button>
+        <button data-fund="Annadana">🍚<span>Annadana</span></button>
+        <button data-fund="Temple Development">🛕<span>Development</span></button>
+        <button data-fund="Go Seva">🐄<span>Go Seva</span></button>
+        <button data-fund="Nandadeep">🔥<span>Nandadeep</span></button>
+        <button data-fund="Festivals">🎉<span>Festivals</span></button>
+        <button data-fund="Veda Pathashala">📚<span>Education</span></button>
+      </div>
+      <p class="small">UPI · Cards · Net Banking. Receipts are generated instantly; 80G certificates where applicable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW TO REACH ============ -->
+<section class="section reach" id="reach">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Getting here</p>
+      <h2>How to Reach Ganagapur</h2>
+    </div>
+    <div class="reach-tabs" id="reachTabs"></div>
+    <div class="reach-body">
+      <div class="reach-modes" id="reachModes"></div>
+      <div class="reach-facts">
+        <img src="assets/img/station-platform.jpg" alt="Ganagapur Road station" loading="lazy" />
+        <ul>
+          <li><b>🚆 Nearest station</b>Ganagapur Road (GUR) · ~20 km</li>
+          <li><b>🚌 Bus stand</b>Opposite the temple Mahadwara</li>
+          <li><b>✈️ Nearest airport</b>Kalaburagi · ~52 km</li>
+          <li><b>🅿️ Parking</b>Near bus stand · fills by 7 AM on Thursdays</li>
+        </ul>
+        <a class="btn-maroon sm" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=Shri+Dattatreya+Temple+Ganagapur">🚗 Directions to Temple</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GURU CHARITRA ============ -->
+<section class="section gc" id="gurucharitra">
+  <div class="wrap gc-grid">
+    <div class="gc-cover">
+      <div class="book">
+        <span>श्री</span>
+        <b>Guru Charitra</b>
+        <small>Saraswati Gangadhar</small>
+      </div>
+    </div>
+    <div>
+      <p class="eyebrow">Digital Spiritual Library</p>
+      <h2>Shri Guru Charitra</h2>
+      <p>The sacred life of Shripad Shrivallabh and Shri Nrusimha Saraswati in 53 adhyayas. Read, listen, or download in your language.</p>
+      <div class="gc-langs" id="gcLangs">
+        <button class="chip on">Marathi</button><button class="chip">Kannada</button><button class="chip">Hindi</button><button class="chip">English</button><button class="chip">Sanskrit</button>
+      </div>
+      <ul class="gc-list" id="gcList"></ul>
+      <button class="btn-ghost sm" id="gcMore">Show all 53 adhyayas</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section class="section gallery" id="gallery">
+  <div class="wrap">
+    <div class="sec-head split">
+      <div>
+        <p class="eyebrow">Darshan through the lens</p>
+        <h2>Gallery</h2>
+      </div>
+      <div class="map-filters" id="galFilters">
+        <button class="chip on" data-tag="all">All</button>
+        <button class="chip" data-tag="temple">Main Temple</button>
+        <button class="chip" data-tag="sangam">Sangam</button>
+        <button class="chip" data-tag="around">Around Ganagapur</button>
+      </div>
+    </div>
+    <div class="masonry" id="masonry"></div>
+  </div>
+</section>
+
+<!-- ============ HELP ============ -->
+<section class="section help" id="help">
+  <div class="wrap">
+    <div class="sec-head center"><p class="eyebrow">We are here to help</p><h2>Emergency & Assistance</h2></div>
+    <div class="help-grid">
+      <a href="tel:00000000000" class="js-phone"><span>☎️</span>Temple Office</a>
+      <a href="tel:108"><span>🚑</span>Ambulance · 108</a>
+      <a href="tel:112"><span>👮</span>Police · 112</a>
+      <a href="#" data-place="phc"><span>🏥</span>Health Centre</a>
+      <a href="#" data-place="annadan"><span>💧</span>Drinking Water</a>
+      <a href="#" data-place="bus"><span>🚻</span>Toilets</a>
+      <a href="#" data-place="parking"><span>🅿️</span>Parking</a>
+      <a href="#" class="js-wa"><span>📞</span>Lost & Found</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MANTRA ============ -->
+<section class="mantra-band">
+  <p data-i18n="mantra">Digambara Digambara Shripad Vallabha Digambara</p>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="wrap foot-grid">
+    <div>
+      <a href="#top" class="brand light"><span class="brand-mark">ॐ</span><span class="brand-text"><b>Shri Kshetra Ganagapur</b><small>Shri Guru Dattatreya Devasthana</small></span></a>
+      <p class="small" id="addr"></p>
+    </div>
+    <div>
+      <h4>Devotees</h4>
+      <a href="#" data-open="darshan">Darshan booking</a>
+      <a href="#" data-open="seva">Seva & Sankalpa</a>
+      <a href="#stay">Accommodation</a>
+      <a href="#" data-open="donate">Donate</a>
+      <a href="#" data-open="account">Track prasadam</a>
+    </div>
+    <div>
+      <h4>Kshetra</h4>
+      <a href="#timings">Timings</a>
+      <a href="#explore">Temple map</a>
+      <a href="#festivals">Festivals</a>
+      <a href="#gurucharitra">Guru Charitra</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <a href="#" class="js-phone">📞 <span id="fPhone"></span></a>
+      <a href="#" class="js-wa">💬 WhatsApp</a>
+      <a href="#" id="fMail">✉️ Email</a>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>© <span id="yr"></span> Shri Kshetra Ganagapur</span>
+    <button class="linklike" data-open="credits">Photo credits</button>
+  </div>
+</footer>
+
+<!-- ============ CHAT ============ -->
+<button class="chat-fab" id="chatFab" aria-label="Ask Guru Datta">🙏<span>Ask</span></button>
+<div class="chat" id="chat" hidden>
+  <div class="chat-head"><b>Ask Guru Datta</b><small>Answers from official temple information</small><button id="chatClose" aria-label="Close">✕</button></div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-sugg" id="chatSugg"></div>
+  <form class="chat-in" id="chatForm"><input id="chatInput" placeholder="e.g. What time is Kakad Arati?" autocomplete="off"><button>➤</button></form>
+</div>
+
+<!-- ============ MODAL ============ -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true">
+    <button class="modal-x" id="modalX" aria-label="Close">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lb-x" aria-label="Close">✕</button>
+  <button class="lb-prev" aria-label="Previous">‹</button>
+  <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+  <button class="lb-next" aria-label="Next">›</button>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/credits.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
